@@ -1,0 +1,86 @@
+---
+title: "K-fold Cross Validation in R Programming"
+author: "Anuradha Perera"
+date: "2026-08-07"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(caret)
+library(randomForest)
+library(ISLR)
+library(lattice)
+library(tidyverse)
+library(datarium)
+```
+
+### Implementation of K-Fold Cross-Validation on Classification
+
+#### 1. Installing Required Packages
+
+
+#### 2. Loading Libraries and Dataset
+
+```{r}
+data("Smarket")
+dataset <- na.omit(Smarket)  
+dataset <- dataset %>% select(-Year)
+```
+
+#### 3. Exploring the dataset
+
+```{r}
+glimpse(dataset)
+```
+
+#### 4. Training model using 10-fold cross-validation
+
+We are using Random Forest algorithm with 10-fold CV to train the classification model.
+
+```{r}
+set.seed(123)
+train_control <- trainControl(method = "cv", number = 10, sampling = "up")
+
+model_rf <- train(
+  Direction ~ ., 
+  data = dataset,
+  method = "rf", 
+  trControl = train_control
+)
+```
+
+#### 5. Evaluating Model Performance
+
+using confusion matrix
+
+```{r}
+print(model_rf)
+```
+### Implementation the K-fold Technique on Regression
+
+#### 1. Installing Required Packages
+
+#### 2. Loading and Inspecting the Dataset
+
+```{r}
+data("marketing")
+head(marketing)
+```
+
+
+#### 3. Training the Model with 10-Fold Cross-Validation
+
+```{r}
+set.seed(125)
+
+train_control <- trainControl(method = "cv", number = 10)
+
+model <- train(sales ~ ., data = marketing,
+               method = "lm",
+               trControl = train_control)
+
+print(model)
+```
+
